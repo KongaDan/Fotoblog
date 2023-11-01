@@ -1,9 +1,12 @@
 from django.urls import path
 from . import views
-app_name='authentication'
+from django.contrib.auth.views import LoginView,LogoutView,PasswordChangeView,PasswordChangeDoneView
 
+app_name='authentication'
 urlpatterns = [
     
-    path('',views.LoginPageView.as_view(),name='login'),
-    path('logout/',views.logout_page,name='logout'),
+    path('',LoginView.as_view(template_name='authentication/login.html',redirect_authenticated_user=True),name='login'),
+    path('logout/',LogoutView.as_view(),name='logout'),
+    path('password/change',PasswordChangeView.as_view(template_name='authentication/password_change.html'),name='password-change'),
+    path('password/changeDone',PasswordChangeDoneView.as_view(template_name='authentication/password_change_done.html'),name='password-change-done'),
 ]

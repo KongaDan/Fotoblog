@@ -126,3 +126,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL='authentication.User'
 #vers quelle page redirige si l'utilisateur n'est pas connecte
 LOGIN_URL='authentication:login'
+LOGIN_REDIRECT_URL='blog:home'
