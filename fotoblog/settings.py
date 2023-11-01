@@ -127,3 +127,21 @@ AUTH_USER_MODEL='authentication.User'
 #vers quelle page redirige si l'utilisateur n'est pas connecte
 LOGIN_URL='authentication:login'
 LOGIN_REDIRECT_URL='blog:home'
+AUTH_PASSWORD_VALIDATORS=[
+    {
+        'NAME':
+        'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS':{
+            'min_length':8,
+        },
+        
+    },
+    {
+        'NAME':
+        'authentication.validators.ContainsLetterValidator',
+    },
+    {
+        'NAME':
+        'authentication.validartors.ContainsNumberValidator',
+    },
+]
