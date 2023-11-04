@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
+<div class="grid-container">
 <h2>{{blog.title}}</h2>
+<div class="Post">
 <img src="{{blog.photo.image.url}}">
+
 <p>{{blog.photo.caption}}</p>
 <p>{{blog.content}}</p>
+<P><a href="{%url 'blog:edit_blog' blog.id%}">Modifier</a>
 <p><i>De {{blog.author}}</i> -{{blog.date_created}}
+</div>
+</div>
 {% endblock content %}
