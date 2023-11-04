@@ -1,0 +1,9 @@
+{% extends "Base.html" %}
+{% block content %}
+<h2>Telecharger une photo</h2>
+<form method="post" enctype="multipart/form-data">
+    {{form.as_p}}
+    {% csrf_token %}
+    <button type="submit">Publier</button>
+</form>
+{% endblock content %}

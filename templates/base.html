@@ -16,6 +16,7 @@
                 {% endif %}
                 <p><a href="{% url 'blog:home' %}">Accueil</a></p>
                 <p><a href="{% url 'blog:photo_upload' %}">Téléverser une photo</a></p>
+                <p><a href="{%url 'blog:blog_add'%}">Publier un post</a>
                 <p><a href="{% url 'authentication:profil_photo' %}">Changer la photo de profil</a></p>
                 <p><a href="{% url 'authentication:password_change' %}">Changer le mot de passe</a></p>
                 <p><a href="{% url 'authentication:logout' %}">Se déconnecter</a></p>
