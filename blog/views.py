@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,permission_required
 from . models import Photo,Blog
 from . import Forms
 
@@ -10,6 +10,7 @@ def home(request):
     return render(request,'blog/home.html',{'photos':photos,'blogs':blogs})
 
 @login_required
+@permission_required('blog.add_photo',raise_exception=True)
 def photo_upload(request):
     form=Forms.PhotoForm()
     if request.method =="POST":
@@ -22,6 +23,7 @@ def photo_upload(request):
     return render(request,'blog/photo_upload.html',{'form':form})
 
 @login_required
+@permission_required(perm='blog.add_blog')
 def blog_add(request):
     blog_form=Forms.BlogForm()
     photo_form=Forms.PhotoForm()
@@ -49,6 +51,7 @@ def view_blog(request,blog_id):
     return render(request,'Blog/view_blog.html',{'blog':blog})
 
 @login_required
+@permission_required(perm='blog.change_blog')
 def edit_blog(request,blog_id):
     blog=get_object_or_404(Blog,id=blog_id)
     edit_form=Forms.BlogForm(instance=blog)
