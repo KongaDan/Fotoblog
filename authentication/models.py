@@ -7,6 +7,7 @@ class User(AbstractUser):
     ROLE_CHOICES=((CREATOR,'Createur'),(SUBSCRIBER,'Abonne'))
     profile_photo=models.ImageField(verbose_name='Profil photo')
     role=models.CharField(max_length=68,choices=ROLE_CHOICES,verbose_name='Role')
+    follows=models.ManyToManyField('self',limit_choices_to={'role':CREATOR},symmetrical=False,verbose_name='suit')
     def save(self):
         super.save()
         if self.role == self.CREATOR:

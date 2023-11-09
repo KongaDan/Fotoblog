@@ -32,12 +32,12 @@ def blog_add(request):
         photo_form=Forms.PhotoForm(request.POST,request.FILES)
         if all([blog_form.is_valid(),photo_form.is_valid()]):
             photo=photo_form.save(commit=False)
-            blog=blog_form.save(commit=False)
-            blog.author=request.user
             photo.uploader=request.user
             photo.save()
+            blog=blog_form.save(commit=False)
             blog.photo=photo
             blog.save()
+            blog.contributors.add(request.user,through_defaults={'contribution':'Auteur principal'})
             return redirect('blog:home')
     context={
         'blog_form':blog_form,
@@ -72,3 +72,13 @@ def edit_blog(request,blog_id):
                 blog.delete()
                 return redirect('blog:home')
     return render(request,'blog/edit_blog.html',context)
+
+@login_required
+def follow_users(request):
+    form=Forms.FolowUserForm(instance=request.user)
+    if request.method =='POST':
+        form=Forms.FolowUserForm(request.POST,instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('blog:home')
+    return render(request,'blog/follow_users_form.html',{'form':form})
