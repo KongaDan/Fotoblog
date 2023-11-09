@@ -1,9 +1,10 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from django.contrib.auth.decorators import login_required,permission_required
+from django.contrib.auth.decorators import login_required
 from . models import Photo,Blog
 from . import Forms
 from django.db.models import Q
 from itertools import chain
+from django.core.paginator import Paginator
 
 @login_required
 def home(request):
@@ -13,15 +14,21 @@ def home(request):
         chain(blogs,photos),key=lambda instance:
         instance.date_created,reverse=True
     )
-    return render(request,'blog/home.html',{'blogs_and_photos':blogs_and_photos})
+    paginator=Paginator(blogs_and_photos,6)
+    page_number=request.GET.get('page')
+    page_obj=paginator.get_page(page_number)
+    context={'page_obj':page_obj}
+    return render(request,'blog/home.html',{'context':context})
 
 @login_required
 def photo_feed(request):
     photos=Photo.objects.filter(uploader__in=request.user.follows.all()).order_by('-date_created')
-    return render(request,'blog/photo_feed.html',{'photos':photos})
+    paginator=Paginator(photos,4)
+    page_number=request.GET.get('page')
+    page_obj=paginator.get_page(page_number)
+    return render(request,'blog/photo_feed.html',{'page_obj':page_obj})
 
 @login_required
-@permission_required('blog.add_photo',raise_exception=True)
 def photo_upload(request):
     form=Forms.PhotoForm()
     if request.method =="POST":
@@ -34,7 +41,6 @@ def photo_upload(request):
     return render(request,'blog/photo_upload.html',{'form':form})
 
 @login_required
-@permission_required(perm='blog.add_blog')
 def blog_add(request):
     blog_form=Forms.BlogForm()
     photo_form=Forms.PhotoForm()
@@ -62,7 +68,6 @@ def view_blog(request,blog_id):
     return render(request,'Blog/view_blog.html',{'blog':blog})
 
 @login_required
-@permission_required(perm='blog.change_blog')
 def edit_blog(request,blog_id):
     blog=get_object_or_404(Blog,id=blog_id)
     edit_form=Forms.BlogForm(instance=blog)

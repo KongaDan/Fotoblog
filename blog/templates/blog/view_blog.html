@@ -7,9 +7,7 @@
 
 <p>{{blog.photo.caption}}</p>
 <p>{{blog.content}}</p>
-{% if perms.blog.change_blog %}
 <P><a href="{%url 'blog:edit_blog' blog.id%}">Modifier</a>
-{% endif %}
 <p><i>De {{blog.author}}</i> -{{blog.date_created}}
 </div>
 </div>
