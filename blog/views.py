@@ -2,12 +2,23 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required,permission_required
 from . models import Photo,Blog
 from . import Forms
+from django.db.models import Q
+from itertools import chain
 
 @login_required
 def home(request):
-    photos=Photo.objects.all()
-    blogs=Blog.objects.all()
-    return render(request,'blog/home.html',{'photos':photos,'blogs':blogs})
+    blogs=Blog.objects.filter(Q(contributors__in=request.user.follows.all())| Q(starred=True))
+    photos=Photo.objects.filter(uploader__in=request.user.follows.all()).exclude(blog__in=blogs)
+    blogs_and_photos=sorted(
+        chain(blogs,photos),key=lambda instance:
+        instance.date_created,reverse=True
+    )
+    return render(request,'blog/home.html',{'blogs_and_photos':blogs_and_photos})
+
+@login_required
+def photo_feed(request):
+    photos=Photo.objects.filter(uploader__in=request.user.follows.all()).order_by('-date_created')
+    return render(request,'blog/photo_feed.html',{'photos':photos})
 
 @login_required
 @permission_required('blog.add_photo',raise_exception=True)

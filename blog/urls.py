@@ -10,6 +10,7 @@ urlpatterns = [
     path('home/blog/<int:blog_id>',views.view_blog,name='view_blog'),
     path('home/<int:blog_id>/edit',views.edit_blog,name='edit_blog'),
     path('home/follow-users/',views.follow_users,name='follow_users'),
+    path('home/photo_feed/',views.photo_feed,name='photo_feed'),
 ]
 if settings.DEBUG:
     urlpatterns +=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

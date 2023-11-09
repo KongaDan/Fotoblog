@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Votre flux photos</h2>
+{% for instance in photos %}
+{% include 'blog/partials/photo_snippet.html' %}
+{% endfor %}
+{% endblock content %}
